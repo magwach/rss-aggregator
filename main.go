@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/go-chi/chi/v5"
-	godotenv "github.com/joho/godotenv"
+	"github.com/go-chi/cors"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -24,11 +24,26 @@ func main() {
 		Addr:    ":" + portString,
 	}
 
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"https://*", "http://*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300,
+	}))
+
+	v1Router := chi.NewRouter()
+
+	v1Router.HandleFunc("/health", HandlerRediness)
+
+	router.Mount("/v1", v1Router)
+
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Server is running! 🚀"))
 	})
 
-	fmt.Println("Listening on port:", portString)
+	log.Println("Listening on port:", portString)
 
 	err := server.ListenAndServe()
 
