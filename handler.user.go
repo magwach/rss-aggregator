@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/magwach/rss-aggregator/internal/auth"
 	"github.com/magwach/rss-aggregator/internal/database"
 )
 
@@ -15,7 +14,6 @@ func (apiCfg *apiConfig) HandlerCreateUser(w http.ResponseWriter, r *http.Reques
 	type parameters struct {
 		Name string `json:"name"`
 	}
-
 
 	decoder := json.NewDecoder(r.Body)
 
@@ -35,7 +33,7 @@ func (apiCfg *apiConfig) HandlerCreateUser(w http.ResponseWriter, r *http.Reques
 		Name:      params.Name,
 	})
 
-	if err != nil{
+	if err != nil {
 		RespondWithError(w, 400, fmt.Sprintf("Error creating user: %v", err))
 		return
 	}
@@ -43,22 +41,6 @@ func (apiCfg *apiConfig) HandlerCreateUser(w http.ResponseWriter, r *http.Reques
 	RespondWithJson(w, 201, DatabaseUserToUser(user))
 }
 
-
-func (apiCfg *apiConfig) HandlerGetUser(w http.ResponseWriter, r *http.Request) {
-
-	apiKey, err := auth.GetApiKey(r.Header)
-
-	if err != nil{
-		RespondWithError(w, 403, string(err.Error()))
-		return
-	}
-
-	user, err := apiCfg.DB.GetUserByApiKey(r.Context(), apiKey)
-
-	if err != nil {
-		RespondWithError(w, 400, fmt.Sprintf("Error while getting the user: %v", err))
-		return
-	}
-
+func (apiCfg *apiConfig) HandlerGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
 	RespondWithJson(w, 200, DatabaseUserToUser(user))
 }
