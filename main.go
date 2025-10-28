@@ -65,6 +65,8 @@ func main() {
 
 	v1Router.Post("/user/create", apiCfg.HandlerCreateUser)
 
+	v1Router.Get("/user/get", apiCfg.HandlerGetUser)
+
 	router.Mount("/v1", v1Router)
 
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
