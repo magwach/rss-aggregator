@@ -43,3 +43,20 @@ func (apiCfg *apiConfig) HandleCreateFeed(w http.ResponseWriter, r *http.Request
 
 	RespondWithJson(w, 201, DatabaseFeedToFeed(feed))
 }
+
+func (apiCfg *apiConfig) GetAllFeeds(w http.ResponseWriter, r *http.Request) {
+	feeds, err := apiCfg.DB.GetAllFeeds(r.Context())
+
+	feedsSlice := []Feed{}
+
+	if err != nil {
+		RespondWithError(w, 500, fmt.Sprintf("Failed to fetch all feeds: %v", err))
+		return
+	}
+
+	for _, feed := range feeds {
+		feedsSlice = append(feedsSlice, DatabaseFeedToFeed(feed))
+	}
+
+	RespondWithJson(w, 200, feedsSlice)
+}

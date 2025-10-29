@@ -69,6 +69,8 @@ func main() {
 
 	v1Router.Post("/feed/create", apiCfg.GetUserMiddleware(apiCfg.HandleCreateFeed))
 
+	v1Router.Get("/feed/get", apiCfg.GetAllFeeds)
+
 	router.Mount("/v1", v1Router)
 
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
