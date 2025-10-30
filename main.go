@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	// "time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -42,6 +43,8 @@ func main() {
 		DB: queries,
 	}
 
+	// go scrape(queries, 10, time.Minute)
+
 	router := chi.NewRouter()
 	v1Router := chi.NewRouter()
 
@@ -70,6 +73,16 @@ func main() {
 	v1Router.Post("/feed/create", apiCfg.GetUserMiddleware(apiCfg.HandleCreateFeed))
 
 	v1Router.Get("/feed/get", apiCfg.GetAllFeeds)
+
+	v1Router.Post("/feed/follow", apiCfg.GetUserMiddleware(apiCfg.HandleFollowFeed))
+
+	v1Router.Get("/feed/follow", apiCfg.GetUserMiddleware(apiCfg.HandleGetAllFollowingFeeds))
+
+	v1Router.Post("/feed/get", apiCfg.GetUserMiddleware(apiCfg.HandleFollowFeed))
+
+	v1Router.Delete("/feed/unfollow/{feedId}", apiCfg.GetUserMiddleware(apiCfg.HandleUnfollowFeed))
+
+	v1Router.Get("/posts/get", apiCfg.GetUserMiddleware(apiCfg.HandleGetPostsFromFollowing))
 
 	router.Mount("/v1", v1Router)
 
