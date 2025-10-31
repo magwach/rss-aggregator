@@ -85,11 +85,11 @@ Create an environment file (e.g., .env) with values such as:
 
 ### Contributing
 
--Fork the repository.
--Create a new feature branch (git checkout -b feature/my-feature).
--Write code + tests.
--Submit a pull request with a clear description of your changes.
--Ensure existing tests pass and new functionality is well documented.
+- Fork the repository.
+- Create a new feature branch (git checkout -b feature/my-feature).
+- Write code + tests.
+- Submit a pull request with a clear description of your changes.
+- Ensure existing tests pass and new functionality is well documented.
 
 ### License
 
