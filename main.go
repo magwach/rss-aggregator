@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
+
 	// "time"
 
 	"github.com/go-chi/chi/v5"
@@ -43,7 +45,7 @@ func main() {
 		DB: queries,
 	}
 
-	// go scrape(queries, 10, time.Minute)
+	go scrape(queries, 10, time.Minute)
 
 	router := chi.NewRouter()
 	v1Router := chi.NewRouter()
